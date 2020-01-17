@@ -1,6 +1,13 @@
 # Create a class to hold a city location. Call the class "City". It should have
 # fields for name, lat and lon (representing latitude and longitude).
+class City:
+  def __init__(self, name, lat, lon):
+    self.name = name
+    self.lat = lat
+    self.lon = lon
 
+  def __str__(self):
+    return f"{self.name} at {self.lat}, {self.lon}"
 
 # We have a collection of US cities with population over 750,000 stored in the
 # file "cities.csv". (CSV stands for "comma-separated values".)
@@ -15,12 +22,17 @@
 # Note that the first line of the CSV is header that describes the fields--this
 # should not be loaded into a City object.
 cities = []
+import csv
+
 
 def cityreader(cities=[]):
   # TODO Implement the functionality to read from the 'cities.csv' file
   # For each city record, create a new City instance and add it to the 
   # `cities` list
-    
+    with open('cities.csv') as csvfile:
+      cities_info = csv.DictReader(csvfile)
+      for row in cities_info:
+        cities.append(City(row.get('city'), float(row.get('lat')), float(row.get('lng'))))
     return cities
 
 cityreader(cities)
@@ -61,11 +73,30 @@ for c in cities:
 # TODO Get latitude and longitude values from the user
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
+  if lat1 > lat2:
+    lat1, lat2, lon1, lon2 = lat2, lat1, lon2, lon1
   # within will hold the cities that fall within the specified region
   within = []
 
   # TODO Ensure that the lat and lon valuse are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
-
+  for city in cities:
+    lat = float(city.lat)
+    lon = float(city.lon)
+    if lat1 <= lat <= lat2 and lon1 <= lon <= lon2:
+      within.append(city)
   return within
+
+user_input = input("Enter lat1, lon1: ")
+user_input2 = input("Enter lat2, lon2: ")
+
+pair1 = user_input.split(',')
+pair2 = user_input2.split(',')
+for i in range(len(pair1)):
+  pair1[i] = float(pair1[i])
+  pair2[i] = float(pair2[i])
+if (pair1[0] < pair2[0] and pair1[1] < pair2[1]) or (pair1[0] > pair2[0] and pair1[1] > pair2[1]):
+  print(cityreader_stretch(pair1[0], pair1[1], pair2[0], pair2[1], cities))
+else:
+  print("Invalid pairings: This doesnt make a square!")
