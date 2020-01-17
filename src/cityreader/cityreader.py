@@ -87,3 +87,16 @@ def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
     if lat1 <= lat <= lat2 and lon1 <= lon <= lon2:
       within.append(city)
   return within
+
+user_input = input("Enter lat1, lon1: ")
+user_input2 = input("Enter lat2, lon2: ")
+
+pair1 = user_input.split(',')
+pair2 = user_input2.split(',')
+for i in range(len(pair1)):
+  pair1[i] = float(pair1[i])
+  pair2[i] = float(pair2[i])
+if (pair1[0] < pair2[0] and pair1[1] < pair2[1]) or (pair1[0] > pair2[0] and pair1[1] > pair2[1]):
+  print(cityreader_stretch(pair1[0], pair1[1], pair2[0], pair2[1], cities))
+else:
+  print("Invalid pairings: This doesnt make a square!")
