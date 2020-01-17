@@ -32,7 +32,7 @@ def cityreader(cities=[]):
     with open('cities.csv') as csvfile:
       cities_info = csv.DictReader(csvfile)
       for row in cities_info:
-        cities.append(City(row.get('city'), row.get('lat'), row.get('lng')))
+        cities.append(City(row.get('city'), float(row.get('lat')), float(row.get('lng'))))
     return cities
 
 cityreader(cities)
@@ -73,11 +73,17 @@ for c in cities:
 # TODO Get latitude and longitude values from the user
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
+  if lat1 > lat2:
+    lat1, lat2, lon1, lon2 = lat2, lat1, lon2, lon1
   # within will hold the cities that fall within the specified region
   within = []
 
   # TODO Ensure that the lat and lon valuse are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
-
+  for city in cities:
+    lat = float(city.lat)
+    lon = float(city.lon)
+    if lat1 <= lat <= lat2 and lon1 <= lon <= lon2:
+      within.append(city)
   return within
